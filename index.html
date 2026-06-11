@@ -451,13 +451,30 @@ async function callClaudeWithData(marketData) {
   const data = await r.json();
   if (data.error) throw new Error(data.error.message || 'API error');
   const txt = (data.content || []).map(b => b.text || '').join('').trim();
-  const cleaned = txt.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+  const cleaned = txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
   try {
     return JSON.parse(cleaned);
   } catch(e) {
-    console.error('JSON parse failed. stop_reason:', data.stop_reason, 'Raw response:', txt);
-    throw new Error('Parse error (stop_reason: ' + (data.stop_reason || 'unknown') + '). Check console for raw response.');
+    showDebug(data.stop_reason, txt);
+    throw new Error('Parse failed (stop_reason: ' + (data.stop_reason||'unknown') + ') — see debug panel below');
   }
+}
+
+function showDebug(stopReason, rawText) {
+  let panel = document.getElementById('debugPanel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'debugPanel';
+    panel.style.cssText = 'margin-top:16px;padding:14px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;font-size:12px;font-family:monospace;color:var(--text)';
+    document.querySelector('.page').appendChild(panel);
+  }
+  panel.innerHTML =
+    '<div style="font-weight:500;margin-bottom:8px;color:var(--bear)">Debug — raw Claude response</div>' +
+    '<div style="margin-bottom:4px;color:var(--text2)">stop_reason: <strong style=\"color:var(--text)\">' + (stopReason||'unknown') + '</strong></div>' +
+    '<div style="margin-bottom:8px;color:var(--text2)">length: <strong style=\"color:var(--text)\">' + rawText.length + ' chars</strong></div>' +
+    '<div style="white-space:pre-wrap;word-break:break-all;max-height:320px;overflow-y:auto;background:var(--bg3);padding:10px;border-radius:6px;line-height:1.5;font-size:11px">' +
+    rawText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') +
+    '</div>';
 }
 
 async function fullAnalysis(ticker, onStatus) {

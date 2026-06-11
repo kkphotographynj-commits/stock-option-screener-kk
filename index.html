@@ -398,96 +398,65 @@ function calcBB(closes) {
 }
 
 async function callClaudeWithData(marketData) {
-  const prompt = `You are a professional stock screener with 25 years of experience. Analyze this stock using the REAL-TIME market data provided. Base ALL price levels, signals, and recommendations on this actual current data.
+  const md = marketData;
+  const dataBlock = [
+    'Ticker: ' + md.ticker,
+    'Current Price: $' + md.currentPrice,
+    'Day Change: ' + (md.change >= 0 ? '+' : '') + '$' + md.change + ' (' + (md.changePct >= 0 ? '+' : '') + md.changePct + '%)',
+    'Day Range: $' + md.dayLow + ' - $' + md.dayHigh,
+    'Previous Close: $' + md.prevClose,
+    'Volume: ' + (md.volume || 'N/A') + (md.avgVol20 ? ' (20d avg: ' + md.avgVol20 + ', ratio: ' + md.volRatio + 'x)' : ''),
+    '50-day MA: ' + (md.ma50 ? '$' + md.ma50 : 'N/A'),
+    '200-day MA: ' + (md.ma200 ? '$' + md.ma200 : 'N/A'),
+    'RSI(14): ' + (md.rsi || 'N/A'),
+    'MACD Line: ' + (md.macd ? md.macd.line : 'N/A'),
+    'BB Upper: $' + (md.bb ? md.bb.upper : 'N/A') + ' Mid: $' + (md.bb ? md.bb.mid : 'N/A') + ' Lower: $' + (md.bb ? md.bb.lower : 'N/A') + ' Pct: ' + (md.bb ? md.bb.pct : 'N/A'),
+    '52wk High: $' + md.wk52High + ' Low: $' + md.wk52Low,
+    'Support1 (20d low): $' + md.support_1,
+    'Support2 (50d low): $' + md.support_2,
+    'Resistance1 (20d high): $' + md.resistance_1,
+    'Resistance2 (50d high): $' + md.resistance_2
+  ].join('\n');
 
-REAL-TIME MARKET DATA for ${marketData.ticker}:
-- Current Price: $${marketData.currentPrice}
-- Day Change: ${marketData.change > 0 ? '+' : ''}$${marketData.change} (${marketData.changePct > 0 ? '+' : ''}${marketData.changePct}%)
-- Day Range: $${marketData.dayLow} - $${marketData.dayHigh}
-- Previous Close: $${marketData.prevClose}
-- Volume: ${marketData.volume?.toLocaleString()} ${marketData.avgVol20 ? `(20-day avg: ${marketData.avgVol20?.toLocaleString()}, ratio: ${marketData.volRatio}x)` : ''}
-- 50-day MA: ${marketData.ma50 ? '$' + marketData.ma50 : 'N/A'}
-- 200-day MA: ${marketData.ma200 ? '$' + marketData.ma200 : 'N/A'}
-- RSI (14): ${marketData.rsi || 'N/A'}
-- MACD Line: ${marketData.macd?.line || 'N/A'}
-- Bollinger Bands: Upper $${marketData.bb?.upper}, Mid $${marketData.bb?.mid}, Lower $${marketData.bb?.lower} (price at ${marketData.bb?.pct}th percentile)
-- 52-week High: $${marketData.wk52High}
-- 52-week Low: $${marketData.wk52Low}
-- Support 1 (20-day low): $${marketData.support_1}
-- Support 2 (50-day low): $${marketData.support_2}
-- Resistance 1 (20-day high): $${marketData.resistance_1}
-- Resistance 2 (50-day high): $${marketData.resistance_2}
-
-User context: Kaushal focuses on weekly cash-secured puts (CSP) and the Wheel Strategy for income generation. Prefers stocks with long-term fundamental quality + premium richness. Intermediate-to-advanced options fluency.
-
-CRITICAL: Respond ONLY with valid JSON. No markdown, no code blocks, no extra text. Start with { and end with }.
-
-{
-  "ticker": "${marketData.ticker}",
-  "price": ${marketData.currentPrice},
-  "change": ${marketData.change},
-  "change_pct": ${marketData.changePct},
-  "overall_signal": "BUY or SELL or HOLD",
-  "options_signal": "SELL PUT or AVOID or WAIT",
-  "short_term_bias": "Bullish or Bearish or Neutral",
-  "iv_rank": 0,
-  "iv_label": "Low or Normal or Elevated or High",
-  "trend_score": 0,
-  "momentum_score": 0,
-  "technical_score": 0,
-  "fundamental_score": 0,
-  "options_score": 0,
-  "support_1": ${marketData.support_1},
-  "support_2": ${marketData.support_2},
-  "resistance_1": ${marketData.resistance_1},
-  "resistance_2": ${marketData.resistance_2},
-  "earnings_within_14d": false,
-  "earnings_date": null,
-  "indicators": [
-    {"name": "RSI (14)", "value": "${marketData.rsi || 'N/A'}", "signal": "Neutral"},
-    {"name": "MACD", "value": "${marketData.macd?.line || 'N/A'}", "signal": "Neutral"},
-    {"name": "50-day MA", "value": "$${marketData.ma50 || 'N/A'}", "signal": "Above"},
-    {"name": "200-day MA", "value": "$${marketData.ma200 || 'N/A'}", "signal": "Above"},
-    {"name": "Bollinger Bands", "value": "${marketData.bb?.pct || 'N/A'}th pct", "signal": "Neutral"},
-    {"name": "Volume", "value": "${marketData.volRatio || 'N/A'}x avg", "signal": "Neutral"}
-  ],
-  "timeframes": [
-    {"tf": "Daily", "trend": "Uptrend", "signal": "BUY"},
-    {"tf": "Weekly", "trend": "Uptrend", "signal": "BUY"},
-    {"tf": "Monthly", "trend": "Uptrend", "signal": "HOLD"}
-  ],
-  "csp_strike": 0,
-  "csp_expiry": "7-14 DTE",
-  "csp_premium": "$0.00-$0.00",
-  "csp_capital": "$0",
-  "csp_yield": "0%",
-  "csp_delta": "-0.25",
-  "csp_rationale": "rationale here",
-  "catalysts": ["catalyst1", "catalyst2", "catalyst3"],
-  "risks": ["risk1", "risk2"],
-  "summary": "summary here"
-}`;
+  const prompt = 'You are a professional stock screener with 25 years of experience. Analyze ' + md.ticker + ' using this REAL-TIME market data and return ONLY a JSON object.\n\n' +
+    'LIVE DATA:\n' + dataBlock + '\n\n' +
+    'User: Kaushal, focuses on weekly CSPs and Wheel Strategy for income. Wants real price-anchored signals.\n\n' +
+    'Return ONLY this JSON, no other text, no markdown:\n' +
+    '{"ticker":"' + md.ticker + '","price":' + md.currentPrice + ',"change":' + md.change + ',"change_pct":' + md.changePct + ',' +
+    '"overall_signal":"BUY","options_signal":"SELL PUT","short_term_bias":"Bullish",' +
+    '"iv_rank":50,"iv_label":"Normal","trend_score":7,"momentum_score":7,"technical_score":7,"fundamental_score":7,"options_score":7,' +
+    '"support_1":' + md.support_1 + ',"support_2":' + md.support_2 + ',"resistance_1":' + md.resistance_1 + ',"resistance_2":' + md.resistance_2 + ',' +
+    '"earnings_within_14d":false,"earnings_date":null,' +
+    '"indicators":[{"name":"RSI (14)","value":"' + (md.rsi || 'N/A') + '","signal":"Neutral"},{"name":"MACD","value":"' + (md.macd ? md.macd.line : 'N/A') + '","signal":"Neutral"},{"name":"50-day MA","value":"$' + (md.ma50 || 'N/A') + '","signal":"Above"},{"name":"200-day MA","value":"$' + (md.ma200 || 'N/A') + '","signal":"Above"},{"name":"Bollinger Bands","value":"' + (md.bb ? md.bb.pct + 'th pct' : 'N/A') + '","signal":"Neutral"},{"name":"Volume","value":"' + (md.volRatio || 'N/A') + 'x avg","signal":"Neutral"}],' +
+    '"timeframes":[{"tf":"Daily","trend":"replace_me","signal":"BUY"},{"tf":"Weekly","trend":"replace_me","signal":"BUY"},{"tf":"Monthly","trend":"replace_me","signal":"HOLD"}],' +
+    '"csp_strike":0,"csp_expiry":"7-14 DTE","csp_premium":"$0-$0","csp_capital":"$0","csp_yield":"0%","csp_delta":"-0.25",' +
+    '"csp_rationale":"write 2-3 sentences here",' +
+    '"catalysts":["catalyst1","catalyst2","catalyst3"],' +
+    '"risks":["risk1","risk2"],' +
+    '"summary":"write 3-4 sentences here"}';
 
   const r = await fetch(PROXY, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicKey },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1200,
+      max_tokens: 2000,
       messages: [{ role: 'user', content: prompt }]
     })
   });
   if (!r.ok) {
     const e = await r.json().catch(() => ({}));
-    throw new Error(e.error?.message || `API error ${r.status}`);
+    throw new Error(e.error?.message || 'API error ' + r.status);
   }
-  const d = await r.json();
-  const txt = (d.content || []).map(b => b.text || '').join('');
+  const data = await r.json();
+  if (data.error) throw new Error(data.error.message || 'API error');
+  const txt = (data.content || []).map(b => b.text || '').join('').trim();
+  const cleaned = txt.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
   try {
-    return JSON.parse(txt.replace(/```json|```/g, '').trim());
+    return JSON.parse(cleaned);
   } catch(e) {
-    console.error('JSON parse failed. Raw:', txt);
-    throw new Error('Invalid response from Claude. Check console.');
+    console.error('JSON parse failed. stop_reason:', data.stop_reason, 'Raw response:', txt);
+    throw new Error('Parse error (stop_reason: ' + (data.stop_reason || 'unknown') + '). Check console for raw response.');
   }
 }
 

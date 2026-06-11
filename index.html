@@ -7,182 +7,113 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #ffffff;
-    --bg2: #f5f5f4;
-    --bg3: #efefed;
-    --text: #1a1a18;
-    --text2: #6b6b67;
-    --text3: #9e9e99;
-    --border: rgba(0,0,0,0.12);
-    --border2: rgba(0,0,0,0.22);
-    --success-bg: #e1f5ee;
-    --success-text: #0f6e56;
-    --danger-bg: #faece7;
-    --danger-text: #993c1d;
-    --warn-bg: #faeeda;
-    --warn-text: #633806;
-    --neutral-bg: #f1efe8;
-    --neutral-text: #5f5e5a;
-    --info-bg: #e6f1fb;
-    --info-text: #185fa5;
-    --bull: #1D9E75;
-    --bear: #D85A30;
-    --neutral: #888780;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-mono: 'SF Mono', 'Fira Code', monospace;
+    --bg:#ffffff; --bg2:#f5f5f4; --bg3:#efefed; --text:#1a1a18; --text2:#6b6b67; --text3:#9e9e99;
+    --border:rgba(0,0,0,0.12); --border2:rgba(0,0,0,0.22);
+    --success-bg:#e1f5ee; --success-text:#0f6e56; --danger-bg:#faece7; --danger-text:#993c1d;
+    --warn-bg:#faeeda; --warn-text:#633806; --neutral-bg:#f1efe8; --neutral-text:#5f5e5a;
+    --info-bg:#e6f1fb; --info-text:#185fa5; --bull:#1D9E75; --bear:#D85A30; --neutral:#888780;
+    --radius:8px; --radius-lg:12px;
+    --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; --font-mono:'SF Mono','Fira Code',monospace;
   }
-
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1e1e1c;
-      --bg2: #2a2a28;
-      --bg3: #333331;
-      --text: #f0f0ec;
-      --text2: #a0a09b;
-      --text3: #6e6e69;
-      --border: rgba(255,255,255,0.12);
-      --border2: rgba(255,255,255,0.22);
-      --success-bg: #085041;
-      --success-text: #9fe1cb;
-      --danger-bg: #712b13;
-      --danger-text: #f5c4b3;
-      --warn-bg: #633806;
-      --warn-text: #fac775;
-      --neutral-bg: #444441;
-      --neutral-text: #d3d1c7;
-      --info-bg: #0c447c;
-      --info-text: #b5d4f4;
-      --bull: #5dcaa5;
-      --bear: #f0997b;
-      --neutral: #b4b2a9;
+      --bg:#1e1e1c; --bg2:#2a2a28; --bg3:#333331; --text:#f0f0ec; --text2:#a0a09b; --text3:#6e6e69;
+      --border:rgba(255,255,255,0.12); --border2:rgba(255,255,255,0.22);
+      --success-bg:#085041; --success-text:#9fe1cb; --danger-bg:#712b13; --danger-text:#f5c4b3;
+      --warn-bg:#633806; --warn-text:#fac775; --neutral-bg:#444441; --neutral-text:#d3d1c7;
+      --info-bg:#0c447c; --info-text:#b5d4f4; --bull:#5dcaa5; --bear:#f0997b; --neutral:#b4b2a9;
     }
   }
-
-  html, body { background: var(--bg3); color: var(--text); font-family: var(--font); font-size: 15px; min-height: 100vh; }
-
-  .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 48px; }
-
-  .hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-  .hdr-left h1 { font-size: 20px; font-weight: 500; color: var(--text); }
-  .hdr-left p { font-size: 13px; color: var(--text2); margin-top: 3px; }
-  .api-row { display: flex; gap: 8px; align-items: center; }
-  .api-row input { width: 320px; font-family: var(--font-mono); font-size: 12px; }
-  .api-key-note { font-size: 11px; color: var(--text3); margin-top: 4px; }
-
-  input, button, select {
-    font-family: var(--font);
-    font-size: 14px;
-    color: var(--text);
-    background: var(--bg);
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    padding: 7px 12px;
-    outline: none;
-    transition: border-color 0.15s;
+  html,body { background:var(--bg3); color:var(--text); font-family:var(--font); font-size:15px; min-height:100vh; }
+  .page { max-width:940px; margin:0 auto; padding:24px 16px 48px; }
+  .hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
+  .hdr-left h1 { font-size:20px; font-weight:500; color:var(--text); }
+  .hdr-left p { font-size:12px; color:var(--text2); margin-top:3px; }
+  .keys-panel { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:14px 16px; margin-bottom:16px; }
+  .keys-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .key-row { display:flex; flex-direction:column; gap:5px; }
+  .key-lbl { font-size:11px; font-weight:500; color:var(--text2); text-transform:uppercase; letter-spacing:.05em; }
+  .key-input-row { display:flex; gap:6px; }
+  .key-input-row input { flex:1; font-family:var(--font-mono); font-size:12px; }
+  .keys-note { font-size:11px; color:var(--text3); margin-top:8px; }
+  input,button,select {
+    font-family:var(--font); font-size:14px; color:var(--text); background:var(--bg);
+    border:0.5px solid var(--border2); border-radius:var(--radius); padding:7px 12px; outline:none; transition:border-color .15s;
   }
-  input:focus { border-color: #378ADD; box-shadow: 0 0 0 3px rgba(55,138,221,0.15); }
-  button {
-    cursor: pointer;
-    background: var(--bg);
-    padding: 7px 14px;
-  }
-  button:hover { background: var(--bg2); }
-  button:active { transform: scale(0.98); }
-  button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .mode-toggle { display: flex; gap: 6px; }
-  .mode-btn { font-size: 12px; padding: 5px 12px; color: var(--text2); }
-  .mode-btn.active { background: var(--bg2); color: var(--text); font-weight: 500; }
-
-  .input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
-  .input-row input { width: 120px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.04em; }
-
-  .chip { font-size: 12px; padding: 4px 12px; border-radius: 99px; cursor: pointer; color: var(--text2); background: var(--bg); border: 0.5px solid var(--border2); white-space: nowrap; }
-  .chip:hover { background: var(--bg2); color: var(--text); }
-
-  .wl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 12px; margin-bottom: 16px; }
-  .wl-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; cursor: pointer; position: relative; transition: border-color 0.15s; }
-  .wl-card:hover { border-color: var(--border2); }
-  .wl-ticker { font-size: 17px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-  .wl-price { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
-  .wl-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px; }
-  .wl-csp { font-size: 11px; color: var(--text2); }
-  .wl-remove { position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; color: var(--text3); font-size: 18px; padding: 2px 5px; border-radius: 4px; line-height: 1; }
-  .wl-remove:hover { color: var(--bear); background: none; }
-
-  .wl-loading { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); padding: 14px 16px; border: 0.5px dashed var(--border); border-radius: var(--radius-lg); }
-  .mini-spinner { width: 14px; height: 14px; border: 1.5px solid var(--border); border-top-color: var(--text2); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
-
-  .empty-wl { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; border: 0.5px dashed var(--border); border-radius: var(--radius-lg); }
-
-  .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 99px; }
-  .badge.buy { background: var(--success-bg); color: var(--success-text); }
-  .badge.sell { background: var(--danger-bg); color: var(--danger-text); }
-  .badge.hold { background: var(--neutral-bg); color: var(--neutral-text); }
-  .badge.warn { background: var(--warn-bg); color: var(--warn-text); }
-  .badge.info { background: var(--info-bg); color: var(--info-text); }
-
-  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; }
-  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
-  .mc { background: var(--bg2); border-radius: var(--radius); padding: 12px 14px; }
-  .mc-lbl { font-size: 12px; color: var(--text2); margin-bottom: 5px; }
-  .mc-val { font-size: 21px; font-weight: 500; color: var(--text); line-height: 1; }
-  .mc-sub { font-size: 11px; color: var(--text2); margin-top: 3px; }
-
-  .bull { color: var(--bull); }
-  .bear { color: var(--bear); }
-  .neutral-c { color: var(--neutral); }
-
-  .tabs { display: flex; gap: 4px; border-bottom: 0.5px solid var(--border); margin-bottom: 14px; }
-  .tab { font-size: 13px; padding: 6px 14px; border: none; background: none; color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; border-radius: 0; }
-  .tab.active { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
-  .tab:hover:not(.active) { color: var(--text); background: none; }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .two-col { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; margin-bottom: 14px; }
-  .sec-title { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
-
-  .irow { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
-  .irow:last-child { border-bottom: none; }
-  .iname { color: var(--text2); }
-  .ival { font-weight: 500; color: var(--text); }
-
-  .score-ring { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; font-size: 24px; font-weight: 500; border: 2.5px solid; }
-  .score-ring.hi { border-color: var(--bull); color: var(--bull); }
-  .score-ring.mid { border-color: #BA7517; color: #BA7517; }
-  .score-ring.lo { border-color: var(--bear); color: var(--bear); }
-  .score-lbl { font-size: 10px; color: var(--text2); margin-top: 3px; text-align: center; }
-
-  .chart-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; font-size: 11px; color: var(--text2); }
-  .leg-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; vertical-align: middle; }
-
-  .detail-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  .detail-ticker { font-size: 26px; font-weight: 500; color: var(--text); }
-
-  .back-btn { font-size: 13px; color: var(--text2); cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 14px; background: none; border: none; padding: 0; }
-  .back-btn:hover { color: var(--text); background: none; }
-
-  .earnings-alert { background: var(--warn-bg); border: 0.5px solid #EF9F27; border-radius: var(--radius); padding: 10px 14px; color: var(--warn-text); font-size: 13px; margin-bottom: 14px; }
-
-  .loading-box { text-align: center; padding: 3rem 1rem; color: var(--text2); }
-  .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--text2); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .err-box { background: var(--danger-bg); border: 0.5px solid var(--bear); border-radius: var(--radius); padding: 10px 14px; color: var(--danger-text); font-size: 13px; margin-bottom: 14px; }
-
-  .csp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
-
-  .disclaimer { font-size: 11px; color: var(--text3); margin-top: 20px; border-top: 0.5px solid var(--border); padding-top: 10px; }
-
-  .section { margin-bottom: 14px; }
-
-  hr.divider { border: none; border-top: 0.5px solid var(--border); margin: 14px 0; }
+  input:focus { border-color:#378ADD; box-shadow:0 0 0 3px rgba(55,138,221,0.15); }
+  button { cursor:pointer; background:var(--bg); padding:7px 14px; }
+  button:hover { background:var(--bg2); }
+  button:active { transform:scale(0.98); }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .mode-toggle { display:flex; gap:6px; margin-bottom:14px; }
+  .mode-btn { font-size:12px; padding:5px 12px; color:var(--text2); }
+  .mode-btn.active { background:var(--bg2); color:var(--text); font-weight:500; }
+  .input-row { display:flex; gap:8px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
+  .input-row input { width:120px; text-transform:uppercase; font-weight:500; letter-spacing:.04em; }
+  .chip { font-size:12px; padding:4px 12px; border-radius:99px; cursor:pointer; color:var(--text2); background:var(--bg); border:0.5px solid var(--border2); white-space:nowrap; }
+  .chip:hover { background:var(--bg2); color:var(--text); }
+  .live-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:500; padding:2px 8px; border-radius:99px; background:var(--success-bg); color:var(--success-text); margin-left:6px; }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--bull); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .wl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:16px; }
+  .wl-card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:14px 16px; cursor:pointer; position:relative; transition:border-color .15s; }
+  .wl-card:hover { border-color:var(--border2); }
+  .wl-ticker { font-size:17px; font-weight:500; color:var(--text); margin-bottom:2px; }
+  .wl-price { font-size:13px; font-weight:500; margin-bottom:2px; }
+  .wl-change { font-size:11px; margin-bottom:8px; }
+  .wl-badges { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:6px; }
+  .wl-csp { font-size:11px; color:var(--text2); }
+  .wl-remove { position:absolute; top:8px; right:8px; background:none; border:none; cursor:pointer; color:var(--text3); font-size:18px; padding:2px 5px; border-radius:4px; line-height:1; }
+  .wl-remove:hover { color:var(--bear); background:none; }
+  .wl-loading { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text2); padding:14px 16px; border:0.5px dashed var(--border); border-radius:var(--radius-lg); }
+  .mini-spinner { width:14px; height:14px; border:1.5px solid var(--border); border-top-color:var(--text2); border-radius:50%; animation:spin .8s linear infinite; flex-shrink:0; }
+  .empty-wl { text-align:center; padding:40px 20px; color:var(--text2); font-size:13px; border:0.5px dashed var(--border); border-radius:var(--radius-lg); }
+  .badge { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:500; padding:2px 9px; border-radius:99px; }
+  .badge.buy { background:var(--success-bg); color:var(--success-text); }
+  .badge.sell { background:var(--danger-bg); color:var(--danger-text); }
+  .badge.hold { background:var(--neutral-bg); color:var(--neutral-text); }
+  .badge.warn { background:var(--warn-bg); color:var(--warn-text); }
+  .badge.info { background:var(--info-bg); color:var(--info-text); }
+  .card { background:var(--bg); border:0.5px solid var(--border); border-radius:var(--radius-lg); padding:16px 20px; }
+  .metric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:14px; }
+  .mc { background:var(--bg2); border-radius:var(--radius); padding:12px 14px; }
+  .mc-lbl { font-size:12px; color:var(--text2); margin-bottom:5px; }
+  .mc-val { font-size:21px; font-weight:500; color:var(--text); line-height:1; }
+  .mc-sub { font-size:11px; color:var(--text2); margin-top:3px; }
+  .bull { color:var(--bull); } .bear { color:var(--bear); } .neutral-c { color:var(--neutral); }
+  .tabs { display:flex; gap:4px; border-bottom:0.5px solid var(--border); margin-bottom:14px; }
+  .tab { font-size:13px; padding:6px 14px; border:none; background:none; color:var(--text2); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-0.5px; border-radius:0; }
+  .tab.active { color:var(--text); border-bottom-color:var(--text); font-weight:500; }
+  .tab:hover:not(.active) { color:var(--text); background:none; }
+  .tab-content { display:none; } .tab-content.active { display:block; }
+  .two-col { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; margin-bottom:14px; }
+  .sec-title { font-size:11px; font-weight:500; color:var(--text2); text-transform:uppercase; letter-spacing:.07em; margin-bottom:8px; }
+  .irow { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:0.5px solid var(--border); font-size:13px; }
+  .irow:last-child { border-bottom:none; }
+  .iname { color:var(--text2); } .ival { font-weight:500; color:var(--text); }
+  .score-ring { display:flex; flex-direction:column; align-items:center; justify-content:center; width:72px; height:72px; border-radius:50%; font-size:24px; font-weight:500; border:2.5px solid; }
+  .score-ring.hi { border-color:var(--bull); color:var(--bull); }
+  .score-ring.mid { border-color:#BA7517; color:#BA7517; }
+  .score-ring.lo { border-color:var(--bear); color:var(--bear); }
+  .score-lbl { font-size:10px; color:var(--text2); margin-top:3px; text-align:center; }
+  .chart-legend { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:8px; font-size:11px; color:var(--text2); }
+  .leg-dot { width:10px; height:10px; border-radius:2px; display:inline-block; margin-right:4px; vertical-align:middle; }
+  .detail-hdr { display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+  .detail-ticker { font-size:26px; font-weight:500; color:var(--text); }
+  .detail-price { font-size:20px; font-weight:500; }
+  .back-btn { font-size:13px; color:var(--text2); cursor:pointer; display:inline-flex; align-items:center; gap:5px; margin-bottom:14px; background:none; border:none; padding:0; }
+  .back-btn:hover { color:var(--text); background:none; }
+  .earnings-alert { background:var(--warn-bg); border:0.5px solid #EF9F27; border-radius:var(--radius); padding:10px 14px; color:var(--warn-text); font-size:13px; margin-bottom:14px; }
+  .loading-box { text-align:center; padding:3rem 1rem; color:var(--text2); }
+  .spinner { width:28px; height:28px; border:2px solid var(--border); border-top-color:var(--text2); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 12px; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .err-box { background:var(--danger-bg); border:0.5px solid var(--bear); border-radius:var(--radius); padding:10px 14px; color:var(--danger-text); font-size:13px; margin-bottom:14px; }
+  .csp-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:14px; }
+  .data-source { font-size:11px; color:var(--text3); margin-bottom:10px; }
+  .disclaimer { font-size:11px; color:var(--text3); margin-top:20px; border-top:0.5px solid var(--border); padding-top:10px; }
+  hr.divider { border:none; border-top:0.5px solid var(--border); margin:14px 0; }
+  .section { margin-bottom:14px; }
 </style>
 </head>
 <body>
@@ -190,23 +121,37 @@
 
   <div class="hdr">
     <div class="hdr-left">
-      <h1>Stock Screener</h1>
-      <p>Watchlist · Technical · Options · Earnings flags</p>
-    </div>
-    <div style="text-align:right">
-      <div class="api-row">
-        <input type="password" id="apiKey" placeholder="sk-ant-api03-…" autocomplete="off" />
-        <button onclick="saveKey()">Save key</button>
-        <button onclick="clearKey()" style="color:#D85A30">Clear</button>
-      </div>
-      <div class="api-key-note">
-        <label style="display:flex;align-items:center;gap:6px;font-size:12px;margin-top:6px;cursor:pointer">
-          <input type="checkbox" id="saveKeyLocal" style="cursor:pointer" /> Save key in browser (local only)
-        </label>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px">API key stored in browser storage only — never sent anywhere except to Anthropic API</div>
-      </div>
+      <h1>Stock Screener <span class="live-badge"><span class="live-dot"></span>Live data</span></h1>
+      <p>Real-time market data via Polygon · AI analysis via Claude Sonnet</p>
     </div>
   </div>
+
+  <div class="keys-panel">
+    <div class="keys-grid">
+      <div class="key-row">
+        <div class="key-lbl">Anthropic API key</div>
+        <div class="key-input-row">
+          <input type="password" id="apiKey" placeholder="sk-ant-api03-…" autocomplete="off" />
+          <button onclick="saveKeys()">Save</button>
+        </div>
+      </div>
+      <div class="key-row">
+        <div class="key-lbl">Polygon API key</div>
+        <div class="key-input-row">
+          <input type="password" id="polygonKey" placeholder="Polygon key…" autocomplete="off" />
+          <button onclick="clearKeys()" style="color:var(--bear)">Clear</button>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer">
+        <input type="checkbox" id="saveKeyLocal" style="cursor:pointer" /> Save keys in browser (local only)
+      </label>
+    </div>
+    <div class="keys-note">Keys stored in your browser only — never sent anywhere except directly to each API.</div>
+  </div>
+
+  <div id="keyAlert" class="err-box" style="display:none">Enter both API keys above to get started.</div>
 
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
     <div class="mode-toggle">
@@ -215,9 +160,6 @@
     </div>
   </div>
 
-  <div id="keyAlert" class="err-box" style="display:none">Enter your Anthropic API key above to get started.</div>
-
-  <!-- WATCHLIST MODE -->
   <div id="modeWatchlist">
     <div class="input-row">
       <input type="text" id="wlInput" placeholder="Add ticker…" maxlength="6" />
@@ -230,21 +172,18 @@
       <div class="chip" onclick="addChip('AMZN')">AMZN</div>
       <div class="chip" onclick="addChip('TSLA')">TSLA</div>
     </div>
-
     <div id="wlCards" class="wl-grid">
       <div class="empty-wl">
         <div style="font-size:32px;opacity:.3;margin-bottom:8px">&#9783;</div>
         Add tickers above to build your watchlist
       </div>
     </div>
-
     <div id="wlDetail" style="display:none">
       <button class="back-btn" onclick="closeDetail()">&#8592; Back to watchlist</button>
       <div id="wlDetailContent"></div>
     </div>
   </div>
 
-  <!-- SINGLE MODE -->
   <div id="modeSingle" style="display:none">
     <div class="input-row">
       <input type="text" id="singleInput" placeholder="e.g. NVDA" maxlength="6" />
@@ -257,119 +196,74 @@
     </div>
     <div id="singleLoading" class="loading-box" style="display:none">
       <div class="spinner"></div>
-      <div style="font-size:13px">Running analysis…</div>
+      <div id="singleLoadingMsg" style="font-size:13px">Fetching live data…</div>
     </div>
     <div id="singleError" class="err-box" style="display:none"></div>
     <div id="singleResult"></div>
     <div id="singleEmpty" style="text-align:center;padding:3rem 1rem;color:var(--text2)">
       <div style="font-size:40px;opacity:.25;margin-bottom:10px">&#9650;</div>
-      <div style="font-size:13px">Enter a ticker to run a full analysis</div>
+      <div style="font-size:13px">Enter a ticker to run a live analysis</div>
     </div>
   </div>
 
-  <div class="disclaimer">Not financial advice. For research and educational purposes only. Always verify with current market data before trading.</div>
+  <div class="disclaimer">Not financial advice. For research and educational purposes only. Market data 15-min delayed on Polygon free tier. Always verify before trading.</div>
 </div>
 
 <script>
-const SYSTEM = `You are a professional stock screener with 25 years of experience in technical and options analysis.
+const PROXY = 'https://restless-mode-1ab5.kkphotographynj.workers.dev/';
 
-CRITICAL: You must respond with ONLY a valid JSON object. No markdown, no code blocks, no explanation, no extra text before or after. Start immediately with { and end with }.
-
-{
-  "ticker": "NVDA",
-  "price": 125.50,
-  "overall_signal": "BUY",
-  "options_signal": "SELL PUT",
-  "short_term_bias": "Bullish",
-  "iv_rank": 65,
-  "iv_label": "Elevated",
-  "trend_score": 8,
-  "momentum_score": 7,
-  "technical_score": 8,
-  "fundamental_score": 7,
-  "options_score": 8,
-  "support_1": 120.00,
-  "support_2": 115.00,
-  "resistance_1": 130.00,
-  "resistance_2": 135.00,
-  "earnings_within_14d": false,
-  "earnings_date": null,
-  "indicators": [
-    {"name": "RSI (14)", "value": "65.2", "signal": "Overbought"},
-    {"name": "MACD", "value": "Bullish cross", "signal": "Bullish"},
-    {"name": "50-day MA", "value": "$118.40", "signal": "Above"},
-    {"name": "200-day MA", "value": "$110.20", "signal": "Above"},
-    {"name": "Bollinger Bands", "value": "Upper band", "signal": "Strong"},
-    {"name": "Volume", "value": "Above average", "signal": "Bullish"}
-  ],
-  "timeframes": [
-    {"tf": "Daily", "trend": "Uptrend", "signal": "BUY"},
-    {"tf": "Weekly", "trend": "Uptrend", "signal": "BUY"},
-    {"tf": "Monthly", "trend": "Uptrend", "signal": "HOLD"}
-  ],
-  "csp_strike": 120.00,
-  "csp_expiry": "7-14 DTE",
-  "csp_premium": "$1.80-$2.40",
-  "csp_capital": "$12,000",
-  "csp_yield": "1.5-2.0%",
-  "csp_delta": "-0.25",
-  "csp_rationale": "Strong uptrend with elevated IV provides good premium capture. CSP strike at support offers favorable risk-reward for weekly income.",
-  "catalysts": ["Positive earnings sentiment", "AI infrastructure demand", "Analyst upgrades"],
-  "risks": ["Tech sector rotation", "Macro headwinds", "Valuation compression"],
-  "summary": "Strong technical setup with bullish momentum across timeframes. Elevated IV presents attractive CSP opportunity at support. Long-term thesis remains intact with quality fundamentals supporting the position."
-}`;
-
-let apiKey = '';
+let anthropicKey = '';
+let polygonKey = '';
 let watchlist = {};
 let chartInstances = {};
 
-// Load saved key on page load
 window.addEventListener('load', function() {
-  const saved = localStorage.getItem('screener_api_key');
+  const saved = localStorage.getItem('screener_keys');
   if (saved) {
-    apiKey = saved;
-    document.getElementById('apiKey').value = '••••••••••••••••••••';
-    document.getElementById('saveKeyLocal').checked = true;
+    try {
+      const keys = JSON.parse(saved);
+      anthropicKey = keys.anthropic || '';
+      polygonKey = keys.polygon || '';
+      if (anthropicKey) document.getElementById('apiKey').value = '••••••••••••••••••••';
+      if (polygonKey) document.getElementById('polygonKey').value = '••••••••••••••••••••';
+      if (anthropicKey || polygonKey) document.getElementById('saveKeyLocal').checked = true;
+    } catch(e) {}
   }
 });
 
-function saveKey() {
-  let val = document.getElementById('apiKey').value.trim();
-  if (!val) return;
-  
-  // Validate the key format
-  if (!val.startsWith('sk-ant-')) {
-    alert('API key should start with "sk-ant-". Please verify you copied the full key from console.anthropic.com');
+function saveKeys() {
+  const aVal = document.getElementById('apiKey').value.trim();
+  const pVal = document.getElementById('polygonKey').value.trim();
+  if (aVal && !aVal.startsWith('•')) anthropicKey = aVal;
+  if (pVal && !pVal.startsWith('•')) polygonKey = pVal;
+  if (!anthropicKey || !polygonKey) {
+    alert('Please enter both API keys.');
     return;
   }
-  
-  apiKey = val;
-  
   if (document.getElementById('saveKeyLocal').checked) {
-    localStorage.setItem('screener_api_key', val);
-    alert('API key saved in browser. It will be loaded automatically next time.');
+    localStorage.setItem('screener_keys', JSON.stringify({ anthropic: anthropicKey, polygon: polygonKey }));
   } else {
-    localStorage.removeItem('screener_api_key');
-    alert('API key saved to memory only (this session only).');
+    localStorage.removeItem('screener_keys');
   }
-  
   document.getElementById('apiKey').value = '••••••••••••••••••••';
+  document.getElementById('polygonKey').value = '••••••••••••••••••••';
   document.getElementById('keyAlert').style.display = 'none';
+  alert('Keys saved.');
 }
 
-function clearKey() {
-  if (!confirm('Clear saved API key?')) return;
-  apiKey = '';
-  localStorage.removeItem('screener_api_key');
+function clearKeys() {
+  if (!confirm('Clear all saved keys?')) return;
+  anthropicKey = ''; polygonKey = '';
+  localStorage.removeItem('screener_keys');
   document.getElementById('apiKey').value = '';
+  document.getElementById('polygonKey').value = '';
   document.getElementById('saveKeyLocal').checked = false;
-  alert('API key cleared.');
+  alert('Keys cleared.');
 }
 
-function checkKey() {
-  if (!apiKey) {
+function checkKeys() {
+  if (!anthropicKey || !polygonKey) {
     document.getElementById('keyAlert').style.display = 'block';
-    document.getElementById('keyAlert').textContent = 'Enter your Anthropic API key at the top to run analyses.';
     return false;
   }
   return true;
@@ -382,18 +276,205 @@ function setMode(m) {
   document.getElementById('btnSingle').classList.toggle('active', m === 'single');
 }
 
-async function callAPI(ticker) {
-  const r = await fetch('https://restless-mode-1ab5.kkphotographynj.workers.dev/', {
+async function fetchPolygonData(ticker) {
+  const t = ticker.toUpperCase();
+  const base = `https://api.polygon.io`;
+
+  // Previous close (price, change, volume)
+  const prevClose = await fetch(`${base}/v2/aggs/ticker/${t}/prev?adjusted=true&apiKey=${polygonKey}`).then(r => r.json());
+  const prevBar = prevClose?.results?.[0] || {};
+
+  // Latest quote for current price
+  const snapshot = await fetch(`${base}/v2/snapshot/locale/us/markets/stocks/tickers/${t}?apiKey=${polygonKey}`).then(r => r.json());
+  const snap = snapshot?.ticker || {};
+  const currentPrice = snap?.day?.c || snap?.prevDay?.c || prevBar.c || 0;
+  const openPrice = snap?.day?.o || prevBar.o || 0;
+  const dayHigh = snap?.day?.h || prevBar.h || 0;
+  const dayLow = snap?.day?.l || prevBar.l || 0;
+  const volume = snap?.day?.v || prevBar.v || 0;
+  const prevClosePrice = snap?.prevDay?.c || prevBar.c || 0;
+  const change = currentPrice - prevClosePrice;
+  const changePct = prevClosePrice ? ((change / prevClosePrice) * 100) : 0;
+
+  // 50-day and 200-day historical bars for MAs and support/resistance
+  const to = new Date().toISOString().split('T')[0];
+  const from200 = new Date(Date.now() - 300 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const bars200 = await fetch(`${base}/v2/aggs/ticker/${t}/range/1/day/${from200}/${to}?adjusted=true&sort=asc&limit=300&apiKey=${polygonKey}`).then(r => r.json());
+  const closes = (bars200?.results || []).map(b => b.c);
+  const highs = (bars200?.results || []).map(b => b.h);
+  const lows = (bars200?.results || []).map(b => b.l);
+  const volumes = (bars200?.results || []).map(b => b.v);
+
+  const ma50 = closes.length >= 50 ? avg(closes.slice(-50)) : null;
+  const ma200 = closes.length >= 200 ? avg(closes.slice(-200)) : null;
+
+  // RSI 14
+  const rsi = closes.length >= 15 ? calcRSI(closes.slice(-15)) : null;
+
+  // MACD
+  const macd = closes.length >= 26 ? calcMACD(closes) : null;
+
+  // Volume average 20-day
+  const avgVol20 = volumes.length >= 20 ? avg(volumes.slice(-20)) : null;
+
+  // Support/resistance from recent swing highs/lows
+  const recent50 = closes.slice(-50);
+  const recentHighs = highs.slice(-50);
+  const recentLows = lows.slice(-50);
+  const s1 = Math.min(...recentLows.slice(-20)).toFixed(2);
+  const s2 = Math.min(...recentLows.slice(-50)).toFixed(2);
+  const r1 = Math.max(...recentHighs.slice(-20)).toFixed(2);
+  const r2 = Math.max(...recentHighs.slice(-50)).toFixed(2);
+
+  // 52-week high/low
+  const wk52High = closes.length >= 252 ? Math.max(...highs.slice(-252)) : Math.max(...highs);
+  const wk52Low = closes.length >= 252 ? Math.min(...lows.slice(-252)) : Math.min(...lows);
+
+  // Bollinger Bands (20-day)
+  const bb = closes.length >= 20 ? calcBB(closes.slice(-20)) : null;
+
+  return {
+    ticker: t,
+    currentPrice: +currentPrice.toFixed(2),
+    openPrice: +openPrice.toFixed(2),
+    dayHigh: +dayHigh.toFixed(2),
+    dayLow: +dayLow.toFixed(2),
+    prevClose: +prevClosePrice.toFixed(2),
+    change: +change.toFixed(2),
+    changePct: +changePct.toFixed(2),
+    volume: Math.round(volume),
+    avgVol20: avgVol20 ? Math.round(avgVol20) : null,
+    ma50: ma50 ? +ma50.toFixed(2) : null,
+    ma200: ma200 ? +ma200.toFixed(2) : null,
+    rsi: rsi ? +rsi.toFixed(1) : null,
+    macd: macd,
+    support_1: +s1,
+    support_2: +s2,
+    resistance_1: +r1,
+    resistance_2: +r2,
+    wk52High: +wk52High.toFixed(2),
+    wk52Low: +wk52Low.toFixed(2),
+    bb: bb,
+    volRatio: avgVol20 ? +(volume / avgVol20).toFixed(2) : null
+  };
+}
+
+function avg(arr) { return arr.reduce((a,b) => a+b, 0) / arr.length; }
+
+function calcRSI(closes) {
+  let gains = 0, losses = 0;
+  for (let i = 1; i < closes.length; i++) {
+    const d = closes[i] - closes[i-1];
+    if (d > 0) gains += d; else losses -= d;
+  }
+  const n = closes.length - 1;
+  const avgGain = gains / n, avgLoss = losses / n;
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - (100 / (1 + rs));
+}
+
+function calcMACD(closes) {
+  const ema12 = calcEMA(closes, 12);
+  const ema26 = calcEMA(closes, 26);
+  const macdLine = ema12 - ema26;
+  return { line: +macdLine.toFixed(3) };
+}
+
+function calcEMA(closes, period) {
+  const k = 2 / (period + 1);
+  let ema = closes[0];
+  for (let i = 1; i < closes.length; i++) ema = closes[i] * k + ema * (1 - k);
+  return ema;
+}
+
+function calcBB(closes) {
+  const mean = avg(closes);
+  const std = Math.sqrt(closes.reduce((s,c) => s + Math.pow(c - mean, 2), 0) / closes.length);
+  const upper = mean + 2 * std, lower = mean - 2 * std;
+  const last = closes[closes.length - 1];
+  const pct = ((last - lower) / (upper - lower) * 100).toFixed(0);
+  return { upper: +upper.toFixed(2), lower: +lower.toFixed(2), mid: +mean.toFixed(2), pct: +pct };
+}
+
+async function callClaudeWithData(marketData) {
+  const prompt = `You are a professional stock screener with 25 years of experience. Analyze this stock using the REAL-TIME market data provided. Base ALL price levels, signals, and recommendations on this actual current data.
+
+REAL-TIME MARKET DATA for ${marketData.ticker}:
+- Current Price: $${marketData.currentPrice}
+- Day Change: ${marketData.change > 0 ? '+' : ''}$${marketData.change} (${marketData.changePct > 0 ? '+' : ''}${marketData.changePct}%)
+- Day Range: $${marketData.dayLow} - $${marketData.dayHigh}
+- Previous Close: $${marketData.prevClose}
+- Volume: ${marketData.volume?.toLocaleString()} ${marketData.avgVol20 ? `(20-day avg: ${marketData.avgVol20?.toLocaleString()}, ratio: ${marketData.volRatio}x)` : ''}
+- 50-day MA: ${marketData.ma50 ? '$' + marketData.ma50 : 'N/A'}
+- 200-day MA: ${marketData.ma200 ? '$' + marketData.ma200 : 'N/A'}
+- RSI (14): ${marketData.rsi || 'N/A'}
+- MACD Line: ${marketData.macd?.line || 'N/A'}
+- Bollinger Bands: Upper $${marketData.bb?.upper}, Mid $${marketData.bb?.mid}, Lower $${marketData.bb?.lower} (price at ${marketData.bb?.pct}th percentile)
+- 52-week High: $${marketData.wk52High}
+- 52-week Low: $${marketData.wk52Low}
+- Support 1 (20-day low): $${marketData.support_1}
+- Support 2 (50-day low): $${marketData.support_2}
+- Resistance 1 (20-day high): $${marketData.resistance_1}
+- Resistance 2 (50-day high): $${marketData.resistance_2}
+
+User context: Kaushal focuses on weekly cash-secured puts (CSP) and the Wheel Strategy for income generation. Prefers stocks with long-term fundamental quality + premium richness. Intermediate-to-advanced options fluency.
+
+CRITICAL: Respond ONLY with valid JSON. No markdown, no code blocks, no extra text. Start with { and end with }.
+
+{
+  "ticker": "${marketData.ticker}",
+  "price": ${marketData.currentPrice},
+  "change": ${marketData.change},
+  "change_pct": ${marketData.changePct},
+  "overall_signal": "BUY or SELL or HOLD",
+  "options_signal": "SELL PUT or AVOID or WAIT",
+  "short_term_bias": "Bullish or Bearish or Neutral",
+  "iv_rank": 0,
+  "iv_label": "Low or Normal or Elevated or High",
+  "trend_score": 0,
+  "momentum_score": 0,
+  "technical_score": 0,
+  "fundamental_score": 0,
+  "options_score": 0,
+  "support_1": ${marketData.support_1},
+  "support_2": ${marketData.support_2},
+  "resistance_1": ${marketData.resistance_1},
+  "resistance_2": ${marketData.resistance_2},
+  "earnings_within_14d": false,
+  "earnings_date": null,
+  "indicators": [
+    {"name": "RSI (14)", "value": "${marketData.rsi || 'N/A'}", "signal": "Neutral"},
+    {"name": "MACD", "value": "${marketData.macd?.line || 'N/A'}", "signal": "Neutral"},
+    {"name": "50-day MA", "value": "$${marketData.ma50 || 'N/A'}", "signal": "Above"},
+    {"name": "200-day MA", "value": "$${marketData.ma200 || 'N/A'}", "signal": "Above"},
+    {"name": "Bollinger Bands", "value": "${marketData.bb?.pct || 'N/A'}th pct", "signal": "Neutral"},
+    {"name": "Volume", "value": "${marketData.volRatio || 'N/A'}x avg", "signal": "Neutral"}
+  ],
+  "timeframes": [
+    {"tf": "Daily", "trend": "Uptrend", "signal": "BUY"},
+    {"tf": "Weekly", "trend": "Uptrend", "signal": "BUY"},
+    {"tf": "Monthly", "trend": "Uptrend", "signal": "HOLD"}
+  ],
+  "csp_strike": 0,
+  "csp_expiry": "7-14 DTE",
+  "csp_premium": "$0.00-$0.00",
+  "csp_capital": "$0",
+  "csp_yield": "0%",
+  "csp_delta": "-0.25",
+  "csp_rationale": "rationale here",
+  "catalysts": ["catalyst1", "catalyst2", "catalyst3"],
+  "risks": ["risk1", "risk2"],
+  "summary": "summary here"
+}`;
+
+  const r = await fetch(PROXY, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey
-    },
+    headers: { 'Content-Type': 'application/json', 'x-api-key': anthropicKey },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1000,
-      system: SYSTEM,
-      messages: [{ role: 'user', content: `Analyze ${ticker.toUpperCase()}` }]
+      max_tokens: 1200,
+      messages: [{ role: 'user', content: prompt }]
     })
   });
   if (!r.ok) {
@@ -404,97 +485,91 @@ async function callAPI(ticker) {
   const txt = (d.content || []).map(b => b.text || '').join('');
   try {
     return JSON.parse(txt.replace(/```json|```/g, '').trim());
-  } catch (e) {
-    console.error('JSON parse failed. Raw response:', txt);
-    throw new Error('Invalid response format from API. Check console for details.');
+  } catch(e) {
+    console.error('JSON parse failed. Raw:', txt);
+    throw new Error('Invalid response from Claude. Check console.');
   }
 }
 
+async function fullAnalysis(ticker, onStatus) {
+  onStatus && onStatus('Fetching live market data…');
+  const marketData = await fetchPolygonData(ticker);
+  onStatus && onStatus('Running AI analysis…');
+  const analysis = await callClaudeWithData(marketData);
+  analysis._marketData = marketData;
+  return analysis;
+}
+
 function badgeCls(s) {
-  s = (s || '').toUpperCase();
+  s = (s||'').toUpperCase();
   if (['BUY','SELL PUT','BULLISH','ABOVE'].includes(s)) return 'buy';
   if (['SELL','AVOID','BEARISH','BELOW'].includes(s)) return 'sell';
   return 'hold';
 }
-function ringCls(v) { v = parseFloat(v); return v >= 7 ? 'hi' : v >= 5 ? 'mid' : 'lo'; }
+function ringCls(v) { v=parseFloat(v); return v>=7?'hi':v>=5?'mid':'lo'; }
 
 function buildLevelChart(canvasId, d) {
   if (chartInstances[canvasId]) { chartInstances[canvasId].destroy(); delete chartInstances[canvasId]; }
-  const price = parseFloat(d.price);
-  const s2 = parseFloat(d.support_2), s1 = parseFloat(d.support_1);
-  const r1 = parseFloat(d.resistance_1), r2 = parseFloat(d.resistance_2);
-  const csp = parseFloat(d.csp_strike);
-  const allVals = [s2, s1, price, r1, r2, csp].filter(v => !isNaN(v));
-  const mn = Math.min(...allVals), mx = Math.max(...allVals);
-  const pad = (mx - mn) * 0.14;
-  const yMin = Math.floor(mn - pad), yMax = Math.ceil(mx + pad);
-
-  const ctx = document.getElementById(canvasId);
+  const price=parseFloat(d.price), s2=parseFloat(d.support_2), s1=parseFloat(d.support_1);
+  const r1=parseFloat(d.resistance_1), r2=parseFloat(d.resistance_2), csp=parseFloat(d.csp_strike);
+  const allVals=[s2,s1,price,r1,r2,csp].filter(v=>!isNaN(v)&&v>0);
+  if (!allVals.length) return;
+  const mn=Math.min(...allVals), mx=Math.max(...allVals), pad=(mx-mn)*0.14;
+  const ctx=document.getElementById(canvasId);
   if (!ctx) return;
   chartInstances[canvasId] = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['S2', 'S1', 'CSP', 'Price', 'R1', 'R2'],
-      datasets: [{
-        label: 'Level',
-        data: [s2, s1, csp, price, r1, r2],
-        backgroundColor: ['#1D9E75','#5DCAA5','#378ADD','#888780','#F0997B','#D85A30'],
-        borderWidth: 0,
-        borderRadius: 4
-      }]
+    type:'bar',
+    data:{
+      labels:['S2','S1','CSP','Price','R1','R2'],
+      datasets:[{ label:'Level', data:[s2,s1,csp,price,r1,r2], backgroundColor:['#1D9E75','#5DCAA5','#378ADD','#888780','#F0997B','#D85A30'], borderWidth:0, borderRadius:4 }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => `$${ctx.raw.toLocaleString()}` } }
-      },
-      scales: {
-        y: {
-          min: yMin, max: yMax,
-          ticks: { callback: v => `$${v.toLocaleString()}`, font: { size: 11 } },
-          grid: { color: 'rgba(128,128,128,0.1)' }
-        },
-        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>`$${c.raw.toLocaleString()}`}} },
+      scales:{
+        y:{ min:Math.floor(mn-pad), max:Math.ceil(mx+pad), ticks:{callback:v=>`$${v.toLocaleString()}`,font:{size:11}}, grid:{color:'rgba(128,128,128,0.1)'} },
+        x:{ ticks:{font:{size:11}}, grid:{display:false} }
       }
     }
   });
 }
 
 function switchDTab(btn, name) {
-  const tabs = btn.closest('.tabs');
-  const container = tabs.parentElement;
-  tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const tabs=btn.closest('.tabs'), container=tabs.parentElement;
+  tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  const target = container.querySelector('#dtab-' + name);
+  container.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  const target=container.querySelector('#dtab-'+name);
   if (target) target.classList.add('active');
 }
 
 function renderDetail(d, container) {
-  const ef = d.earnings_within_14d;
+  const ef=d.earnings_within_14d;
+  const md=d._marketData;
+  const changeColor = d.change >= 0 ? 'var(--bull)' : 'var(--bear)';
+  const changeSign = d.change >= 0 ? '+' : '';
   const earningsHtml = ef
-    ? `<span class="badge warn">&#9873; Earnings ${d.earnings_date || 'soon'} — caution</span>`
+    ? `<span class="badge warn">&#9873; Earnings ${d.earnings_date||'soon'} — caution</span>`
     : (d.earnings_date ? `<span class="badge info">&#9873; Earnings ${d.earnings_date}</span>` : '');
-
-  const cid = 'chart_' + d.ticker.replace(/[^a-zA-Z0-9]/g,'') + '_' + Date.now();
+  const cid='chart_'+d.ticker.replace(/[^a-zA-Z0-9]/g,'')+'_'+Date.now();
 
   container.innerHTML = `
     <div class="detail-hdr">
       <span class="detail-ticker">${d.ticker}</span>
+      <span class="detail-price">$${parseFloat(d.price).toLocaleString()}</span>
+      <span style="font-size:13px;font-weight:500;color:${changeColor}">${changeSign}$${d.change} (${changeSign}${d.change_pct}%)</span>
       <span class="badge ${badgeCls(d.overall_signal)}">${d.overall_signal}</span>
       <span class="badge ${badgeCls(d.options_signal)}">${d.options_signal}</span>
       ${earningsHtml}
     </div>
 
-    ${ef ? `<div class="earnings-alert">&#9888; <strong>Earnings within 14 days (${d.earnings_date || 'upcoming'}).</strong> Avoid opening new CSPs — IV crush risk and binary event exposure post-announcement.</div>` : ''}
+    ${ef ? `<div class="earnings-alert">&#9888; <strong>Earnings within 14 days (${d.earnings_date||'upcoming'}).</strong> Avoid opening new CSPs — IV crush risk and binary event exposure post-announcement.</div>` : ''}
 
     <div class="metric-grid">
-      <div class="mc"><div class="mc-lbl">Price</div><div class="mc-val">$${parseFloat(d.price).toLocaleString()}</div><div class="mc-sub">${d.short_term_bias}</div></div>
-      <div class="mc"><div class="mc-lbl">IV rank</div><div class="mc-val ${parseFloat(d.iv_rank) >= 50 ? 'bull' : 'neutral-c'}">${d.iv_rank}</div><div class="mc-sub">${d.iv_label}</div></div>
-      <div class="mc"><div class="mc-lbl">Trend</div><div class="mc-val">${d.trend_score}<span style="font-size:13px;font-weight:400">/10</span></div></div>
-      <div class="mc"><div class="mc-lbl">Momentum</div><div class="mc-val">${d.momentum_score}<span style="font-size:13px;font-weight:400">/10</span></div></div>
+      <div class="mc"><div class="mc-lbl">Current price</div><div class="mc-val">$${parseFloat(d.price).toLocaleString()}</div><div class="mc-sub" style="color:${changeColor}">${changeSign}${d.change_pct}% today</div></div>
+      <div class="mc"><div class="mc-lbl">Day range</div><div class="mc-val" style="font-size:15px">${md ? `$${md.dayLow} – $${md.dayHigh}` : 'N/A'}</div></div>
+      <div class="mc"><div class="mc-lbl">IV rank (est.)</div><div class="mc-val ${parseFloat(d.iv_rank)>=50?'bull':'neutral-c'}">${d.iv_rank}</div><div class="mc-sub">${d.iv_label}</div></div>
+      <div class="mc"><div class="mc-lbl">52-week range</div><div class="mc-val" style="font-size:15px">${md ? `$${md.wk52Low} – $${md.wk52High}` : 'N/A'}</div></div>
     </div>
 
     <div class="tabs">
@@ -505,6 +580,7 @@ function renderDetail(d, container) {
     </div>
 
     <div id="dtab-levels" class="tab-content active">
+      <div class="data-source">&#9679; Live data from Polygon.io · Levels based on actual 20/50-day highs and lows</div>
       <div class="chart-legend">
         <span><span class="leg-dot" style="background:#1D9E75"></span>Support 2</span>
         <span><span class="leg-dot" style="background:#5DCAA5"></span>Support 1</span>
@@ -519,25 +595,31 @@ function renderDetail(d, container) {
     </div>
 
     <div id="dtab-technical" class="tab-content">
+      <div class="data-source">&#9679; Calculated from live Polygon historical data</div>
       <div class="two-col">
         <div>
           <div class="sec-title">Indicators</div>
           <div class="card">
-            ${(d.indicators || []).map(i => `<div class="irow"><span class="iname">${i.name}</span><span class="ival">${i.value}</span><span class="badge ${badgeCls(i.signal)}" style="font-size:10px;padding:2px 7px">${i.signal}</span></div>`).join('')}
+            ${(d.indicators||[]).map(i=>`<div class="irow"><span class="iname">${i.name}</span><span class="ival">${i.value}</span><span class="badge ${badgeCls(i.signal)}" style="font-size:10px;padding:2px 7px">${i.signal}</span></div>`).join('')}
           </div>
         </div>
         <div>
           <div class="sec-title">Timeframes</div>
           <div class="card" style="margin-bottom:12px">
-            ${(d.timeframes || []).map(t => `<div class="irow"><span class="iname">${t.tf}</span><span class="ival">${t.trend}</span><span class="badge ${badgeCls(t.signal)}" style="font-size:10px;padding:2px 7px">${t.signal}</span></div>`).join('')}
+            ${(d.timeframes||[]).map(t=>`<div class="irow"><span class="iname">${t.tf}</span><span class="ival">${t.trend}</span><span class="badge ${badgeCls(t.signal)}" style="font-size:10px;padding:2px 7px">${t.signal}</span></div>`).join('')}
           </div>
-          <div class="sec-title">Key levels</div>
+          <div class="sec-title">Key levels (live)</div>
           <div class="card">
-            <div class="irow"><span class="iname">R2</span><span class="ival bear">$${parseFloat(d.resistance_2).toLocaleString()}</span></div>
-            <div class="irow"><span class="iname">R1</span><span class="ival bear">$${parseFloat(d.resistance_1).toLocaleString()}</span></div>
-            <div class="irow"><span class="iname" style="font-weight:500">Price</span><span class="ival">$${parseFloat(d.price).toLocaleString()}</span></div>
-            <div class="irow"><span class="iname">S1</span><span class="ival bull">$${parseFloat(d.support_1).toLocaleString()}</span></div>
-            <div class="irow"><span class="iname">S2</span><span class="ival bull">$${parseFloat(d.support_2).toLocaleString()}</span></div>
+            <div class="irow"><span class="iname">R2 (50-day high)</span><span class="ival bear">$${parseFloat(d.resistance_2).toLocaleString()}</span></div>
+            <div class="irow"><span class="iname">R1 (20-day high)</span><span class="ival bear">$${parseFloat(d.resistance_1).toLocaleString()}</span></div>
+            <div class="irow"><span class="iname" style="font-weight:500">Current price</span><span class="ival">$${parseFloat(d.price).toLocaleString()}</span></div>
+            <div class="irow"><span class="iname">S1 (20-day low)</span><span class="ival bull">$${parseFloat(d.support_1).toLocaleString()}</span></div>
+            <div class="irow"><span class="iname">S2 (50-day low)</span><span class="ival bull">$${parseFloat(d.support_2).toLocaleString()}</span></div>
+            ${md ? `
+            <hr class="divider">
+            <div class="irow"><span class="iname">50-day MA</span><span class="ival ${md.ma50 && d.price > md.ma50 ? 'bull' : 'bear'}">$${md.ma50 || 'N/A'}</span></div>
+            <div class="irow"><span class="iname">200-day MA</span><span class="ival ${md.ma200 && d.price > md.ma200 ? 'bull' : 'bear'}">$${md.ma200 || 'N/A'}</span></div>
+            ` : ''}
           </div>
         </div>
       </div>
@@ -555,48 +637,49 @@ function renderDetail(d, container) {
         <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">${d.csp_rationale}</div>
         <hr class="divider">
         <div class="sec-title">Risks</div>
-        ${(d.risks || []).map(r => `<div style="font-size:12px;color:var(--bear);padding:3px 0">&#9888; ${r}</div>`).join('')}
+        ${(d.risks||[]).map(r=>`<div style="font-size:12px;color:var(--bear);padding:3px 0">&#9888; ${r}</div>`).join('')}
       </div>
     </div>
 
     <div id="dtab-scorecard" class="tab-content">
       <div style="display:flex;gap:16px;justify-content:space-around;margin-bottom:16px;flex-wrap:wrap">
-        ${[['Technical', d.technical_score], ['Fundamental', d.fundamental_score], ['Options', d.options_score]].map(([l, v]) => `<div style="text-align:center"><div class="score-ring ${ringCls(v)}">${v}</div><div class="score-lbl">${l}</div></div>`).join('')}
+        ${[['Technical',d.technical_score],['Fundamental',d.fundamental_score],['Options',d.options_score]].map(([l,v])=>`<div style="text-align:center"><div class="score-ring ${ringCls(v)}">${v}</div><div class="score-lbl">${l}</div></div>`).join('')}
       </div>
       <div class="card">
         <div class="sec-title">Catalysts</div>
-        ${(d.catalysts || []).map(c => `<div style="font-size:13px;color:var(--text);padding:5px 0;border-bottom:0.5px solid var(--border)">&#8226; ${c}</div>`).join('')}
+        ${(d.catalysts||[]).map(c=>`<div style="font-size:13px;color:var(--text);padding:5px 0;border-bottom:0.5px solid var(--border)">&#8226; ${c}</div>`).join('')}
         <hr class="divider">
         <div style="font-size:13px;color:var(--text2);line-height:1.7">${d.summary}</div>
       </div>
     </div>
   `;
-
   setTimeout(() => buildLevelChart(cid, d), 80);
 }
 
 function addToWatchlist() {
-  if (!checkKey()) return;
-  const t = document.getElementById('wlInput').value.trim().toUpperCase();
-  if (!t || watchlist[t]) return;
-  document.getElementById('wlInput').value = '';
+  if (!checkKeys()) return;
+  const t=document.getElementById('wlInput').value.trim().toUpperCase();
+  if (!t||watchlist[t]) return;
+  document.getElementById('wlInput').value='';
   addTickerCard(t);
 }
 
 function addChip(t) {
-  if (!checkKey()) return;
+  if (!checkKeys()) return;
   if (watchlist[t]) return;
   addTickerCard(t);
 }
 
 function addTickerCard(ticker) {
-  watchlist[ticker] = { status: 'loading' };
+  watchlist[ticker]={status:'loading', msg:'Fetching live data…'};
   renderWatchlistGrid();
-  callAPI(ticker).then(data => {
-    watchlist[ticker] = { status: 'done', data };
+  fullAnalysis(ticker, msg => {
+    if (watchlist[ticker]) { watchlist[ticker].msg = msg; renderWatchlistGrid(); }
+  }).then(data => {
+    watchlist[ticker]={status:'done', data};
     renderWatchlistGrid();
   }).catch(e => {
-    watchlist[ticker] = { status: 'error', msg: e.message };
+    watchlist[ticker]={status:'error', msg:e.message};
     renderWatchlistGrid();
   });
 }
@@ -605,43 +688,46 @@ function removeFromWatchlist(t, ev) {
   ev.stopPropagation();
   delete watchlist[t];
   renderWatchlistGrid();
-  if (Object.keys(watchlist).length === 0) closeDetail();
+  if (Object.keys(watchlist).length===0) closeDetail();
 }
 
 function openDetail(t) {
-  const item = watchlist[t];
-  if (!item || item.status !== 'done') return;
-  document.getElementById('wlDetail').style.display = 'block';
-  document.getElementById('wlCards').style.display = 'none';
+  const item=watchlist[t];
+  if (!item||item.status!=='done') return;
+  document.getElementById('wlDetail').style.display='block';
+  document.getElementById('wlCards').style.display='none';
   renderDetail(item.data, document.getElementById('wlDetailContent'));
 }
 
 function closeDetail() {
-  document.getElementById('wlDetail').style.display = 'none';
-  document.getElementById('wlCards').style.display = 'grid';
+  document.getElementById('wlDetail').style.display='none';
+  document.getElementById('wlCards').style.display='grid';
 }
 
 function renderWatchlistGrid() {
-  const grid = document.getElementById('wlCards');
-  const keys = Object.keys(watchlist);
-  if (keys.length === 0) {
-    grid.innerHTML = '<div class="empty-wl"><div style="font-size:32px;opacity:.3;margin-bottom:8px">&#9783;</div>Add tickers above to build your watchlist</div>';
+  const grid=document.getElementById('wlCards');
+  const keys=Object.keys(watchlist);
+  if (keys.length===0) {
+    grid.innerHTML='<div class="empty-wl"><div style="font-size:32px;opacity:.3;margin-bottom:8px">&#9783;</div>Add tickers above to build your watchlist</div>';
     return;
   }
-  grid.innerHTML = keys.map(t => {
-    const item = watchlist[t];
-    if (item.status === 'loading') return `<div class="wl-loading"><div class="mini-spinner"></div><span>Analyzing ${t}…</span></div>`;
-    if (item.status === 'error') return `<div class="wl-card" style="border-color:var(--bear)"><button class="wl-remove" onclick="removeFromWatchlist('${t}',event)">&#10005;</button><div class="wl-ticker">${t}</div><div style="font-size:12px;color:var(--bear);margin-top:4px">Failed — ${item.msg || 'try again'}</div></div>`;
-    const d = item.data;
-    const ef = d.earnings_within_14d;
+  grid.innerHTML=keys.map(t => {
+    const item=watchlist[t];
+    if (item.status==='loading') return `<div class="wl-loading"><div class="mini-spinner"></div><span>${item.msg||'Analyzing '+t+'…'}</span></div>`;
+    if (item.status==='error') return `<div class="wl-card" style="border-color:var(--bear)"><button class="wl-remove" onclick="removeFromWatchlist('${t}',event)">&#10005;</button><div class="wl-ticker">${t}</div><div style="font-size:12px;color:var(--bear);margin-top:4px">Failed — ${item.msg||'try again'}</div></div>`;
+    const d=item.data;
+    const ef=d.earnings_within_14d;
+    const changeColor=d.change>=0?'var(--bull)':'var(--bear)';
+    const changeSign=d.change>=0?'+':'';
     return `<div class="wl-card" onclick="openDetail('${t}')">
       <button class="wl-remove" onclick="removeFromWatchlist('${t}',event)" title="Remove">&#10005;</button>
       <div class="wl-ticker">${d.ticker}</div>
-      <div class="wl-price">$${parseFloat(d.price).toLocaleString()} &middot; IV ${d.iv_rank} <span style="font-size:10px;color:var(--text3)">${d.iv_label}</span></div>
+      <div class="wl-price">$${parseFloat(d.price).toLocaleString()}</div>
+      <div class="wl-change" style="color:${changeColor}">${changeSign}$${d.change} (${changeSign}${d.change_pct}%)</div>
       <div class="wl-badges">
         <span class="badge ${badgeCls(d.overall_signal)}">${d.overall_signal}</span>
         <span class="badge ${badgeCls(d.options_signal)}">${d.options_signal}</span>
-        ${ef ? `<span class="badge warn">&#9873; ${d.earnings_date || 'Earnings soon'}</span>` : ''}
+        ${ef?`<span class="badge warn">&#9873; ${d.earnings_date||'Earnings soon'}</span>`:''}
       </div>
       <div class="wl-csp">CSP $${parseFloat(d.csp_strike).toLocaleString()} &middot; ${d.csp_yield}/wk</div>
     </div>`;
@@ -649,42 +735,43 @@ function renderWatchlistGrid() {
 }
 
 function quickSingle(t) {
-  document.getElementById('singleInput').value = t;
+  document.getElementById('singleInput').value=t;
   runSingle();
 }
 
 async function runSingle() {
-  if (!checkKey()) return;
-  const t = document.getElementById('singleInput').value.trim().toUpperCase();
+  if (!checkKeys()) return;
+  const t=document.getElementById('singleInput').value.trim().toUpperCase();
   if (!t) return;
-  document.getElementById('singleEmpty').style.display = 'none';
-  document.getElementById('singleResult').innerHTML = '';
-  document.getElementById('singleError').style.display = 'none';
-  document.getElementById('singleLoading').style.display = 'block';
-  document.getElementById('singleBtn').disabled = true;
+  document.getElementById('singleEmpty').style.display='none';
+  document.getElementById('singleResult').innerHTML='';
+  document.getElementById('singleError').style.display='none';
+  document.getElementById('singleLoading').style.display='block';
+  document.getElementById('singleBtn').disabled=true;
   try {
-    const d = await callAPI(t);
-    document.getElementById('singleLoading').style.display = 'none';
-    document.getElementById('singleBtn').disabled = false;
+    const d=await fullAnalysis(t, msg => {
+      document.getElementById('singleLoadingMsg').textContent=msg;
+    });
+    document.getElementById('singleLoading').style.display='none';
+    document.getElementById('singleBtn').disabled=false;
     renderDetail(d, document.getElementById('singleResult'));
-  } catch (e) {
-    document.getElementById('singleLoading').style.display = 'none';
-    document.getElementById('singleBtn').disabled = false;
-    document.getElementById('singleError').textContent = 'Analysis failed: ' + (e.message || 'unknown error');
-    document.getElementById('singleError').style.display = 'block';
+  } catch(e) {
+    document.getElementById('singleLoading').style.display='none';
+    document.getElementById('singleBtn').disabled=false;
+    document.getElementById('singleError').textContent='Analysis failed: '+(e.message||'unknown error');
+    document.getElementById('singleError').style.display='block';
   }
 }
 
-document.getElementById('wlInput').addEventListener('keydown', e => { if (e.key === 'Enter') addToWatchlist(); });
-document.getElementById('singleInput').addEventListener('keydown', e => { if (e.key === 'Enter') runSingle(); });
-document.getElementById('apiKey').addEventListener('keydown', e => { if (e.key === 'Enter') saveKey(); });
+document.getElementById('wlInput').addEventListener('keydown', e=>{if(e.key==='Enter')addToWatchlist();});
+document.getElementById('singleInput').addEventListener('keydown', e=>{if(e.key==='Enter')runSingle();});
+document.getElementById('apiKey').addEventListener('keydown', e=>{if(e.key==='Enter')saveKeys();});
+document.getElementById('polygonKey').addEventListener('keydown', e=>{if(e.key==='Enter')saveKeys();});
 document.getElementById('saveKeyLocal').addEventListener('change', function() {
-  if (!this.checked) {
-    if (confirm('Uncheck this to delete the saved key?')) {
-      localStorage.removeItem('screener_api_key');
-    } else {
-      this.checked = true;
-    }
+  if (!this.checked && confirm('Remove saved keys from browser?')) {
+    localStorage.removeItem('screener_keys');
+  } else if (!this.checked) {
+    this.checked=true;
   }
 });
 </script>
